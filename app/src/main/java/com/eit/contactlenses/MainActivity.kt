@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         dayCounterText = findViewById(R.id.dayCounterText)
 
         createNotificationChanel()
+        requestNotificationPermission()
 
         mainButton.setOnClickListener{showDayPickerDialog()}
     }
@@ -107,11 +108,14 @@ class MainActivity : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun sendNotification(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
+    private fun requestNotificationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+        }
+    }
+
+    private fun sendNotification() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             return
         }
 
@@ -121,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             .setContentText("Zostało 7 dni do wymiany soczewek!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        with(NotificationManagerCompat.from(this)){
+        with(NotificationManagerCompat.from(this)) {
             notify(1, builder.build())
         }
     }
@@ -130,9 +134,6 @@ class MainActivity : AppCompatActivity() {
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            sendNotification()
-        }
     }
 
 }
