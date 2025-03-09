@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#26AAD3">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,15 +15,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/mainButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nowe soczewki"/>
+        <FrameLayout
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp">
+
+            <ImageButton
+                android:id="@+id/mainButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/circular_button"
+                android:src="@drawable/soczewki"
+                android:scaleType="centerInside"
+                android:contentDescription="Przycisk soczewek"/>
+
+            <TextView
+                android:id="@+id/buttonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wprowadź soczewki"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/dayCounterText"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:textSize="16sp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

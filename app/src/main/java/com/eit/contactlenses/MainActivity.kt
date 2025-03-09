@@ -18,10 +18,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import android.util.TypedValue
+import android.widget.ImageButton
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mainButton: Button
+    private lateinit var mainButton: ImageButton
+    private lateinit var buttonText: TextView
     private lateinit var dayCounterText: TextView
+    private lateinit var vibratorManager: VibratorManager
     private var maxDays: Int = 0
     private var currentDays: Int = 0
     private val CHANNEL_ID = "lens_notification_chanel"
@@ -37,12 +45,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainButton = findViewById(R.id.mainButton)
+        buttonText = findViewById(R.id.buttonText)
         dayCounterText = findViewById(R.id.dayCounterText)
+
+        vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
 
         createNotificationChanel()
         requestNotificationPermission()
 
-        mainButton.setOnClickListener{showDayPickerDialog()}
+        mainButton.setOnClickListener{
+            vibratePhone()
+            showDayPickerDialog()
+        }
     }
 
     private fun showDayPickerDialog(){
@@ -64,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateButtonFunction(){
-        mainButton.text = "Dodaj dzień"
+        buttonText.text = "Dodaj dzień"
         dayCounterText.text = "Dni: $currentDays/$maxDays"
         mainButton.setOnClickListener{
             if (currentDays < maxDays){
@@ -91,7 +105,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetState(){
-        mainButton.text = "Wprowadź nowe soczewki"
+        buttonText.text = "Wprowadź nowe soczewki"
         dayCounterText.text = ""
         mainButton.setOnClickListener{showDayPickerDialog()}
     }
@@ -134,6 +148,11 @@ class MainActivity : AppCompatActivity() {
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun vibratePhone(){
+        val vibrator = vibratorManager.defaultVibrator
+        vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
 }
