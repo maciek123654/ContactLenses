@@ -19,6 +19,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.VibrationEffect
 import android.os.VibratorManager
+import android.util.Log
 import android.widget.ImageButton
 
 class MainActivity : AppCompatActivity() {
@@ -39,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        sharedPreferences = getSharedPreferences("LensPreferences", MODE_PRIVATE)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -52,12 +56,24 @@ class MainActivity : AppCompatActivity() {
         vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
         buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
 
+        maxDays = sharedPreferences.getInt("maxDays", 0)
+        currentDays = sharedPreferences.getInt("currentDays", 0)
+
+        if (maxDays > 0){
+            dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
+        }
+
         createNotificationChanel()
         requestNotificationPermission()
 
         mainButton.setOnClickListener{
+            Log.d("MainActivity", "Klik1")
             vibratePhone()
-            showDayPickerDialog()
+            if (maxDays == 0) {
+                showDayPickerDialog()
+            } else {
+                updateButtonFunction()
+            }
         }
     }
 
@@ -73,27 +89,30 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("Ok") {_, _ ->
                 maxDays = numberPicker.value
                 currentDays = 0
+                saveToSharedPreferences()
                 updateButtonFunction()
             }
             .setNegativeButton(LanguageHelper.getString(this, "cancel"), null)
             .show()
     }
 
-    private fun updateButtonFunction(){
+    private fun updateButtonFunction() {
         buttonText.text = LanguageHelper.getString(this, "add_day")
         dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
-        mainButton.setOnClickListener{
-            if (currentDays < maxDays){
-                currentDays++
-                dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
 
-                if (currentDays == maxDays - 7){
-                    sendNotification()
-                }
+        if (currentDays < maxDays) {
+            currentDays++
+            Log.d("MainActivity", "Klik2")
+            dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
 
-                if (currentDays == maxDays){
-                    showLimitReachedDialog()
-                }
+            saveToSharedPreferences()
+
+            if (currentDays == maxDays - 7) {
+                sendNotification()
+            }
+
+            if (currentDays == maxDays) {
+                showLimitReachedDialog()
             }
         }
     }
@@ -106,10 +125,13 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun resetState(){
+    private fun resetState() {
+        maxDays = 0
+        currentDays = 0
+        saveToSharedPreferences()
         buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
         dayCounterText.text = ""
-        mainButton.setOnClickListener{showDayPickerDialog()}
+        mainButton.setOnClickListener { showDayPickerDialog() }
     }
 
     private fun createNotificationChanel(){
@@ -155,5 +177,14 @@ class MainActivity : AppCompatActivity() {
     private fun vibratePhone(){
         val vibrator = vibratorManager.defaultVibrator
         vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+    }
+
+    private fun saveToSharedPreferences(){
+        val editor = sharedPreferences.edit()
+        editor.putInt("maxDays", maxDays)
+        editor.putInt("currentDays", currentDays)
+        editor.apply()
+
+        Log.d("MainActivity", "Saved maxDays: $maxDays, currentDays: $currentDays")
     }
 }
