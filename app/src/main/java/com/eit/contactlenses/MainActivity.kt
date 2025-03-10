@@ -1,12 +1,10 @@
 package com.eit.contactlenses
 
 import android.app.AlertDialog
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
-import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -17,12 +15,10 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.Manifest
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.VibrationEffect
-import android.os.Vibrator
 import android.os.VibratorManager
-import android.util.TypedValue
 import android.widget.ImageButton
 
 class MainActivity : AppCompatActivity() {
@@ -30,9 +26,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var buttonText: TextView
     private lateinit var dayCounterText: TextView
     private lateinit var vibratorManager: VibratorManager
+    private lateinit var sharedPreferences: SharedPreferences
     private var maxDays: Int = 0
     private var currentDays: Int = 0
     private val CHANNEL_ID = "lens_notification_chanel"
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { LanguageHelper.applySavedLanguage(it) } ?: newBase)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         dayCounterText = findViewById(R.id.dayCounterText)
 
         vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
 
         createNotificationChanel()
         requestNotificationPermission()
@@ -66,24 +68,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Wybierz ilosć dni")
+            .setTitle(LanguageHelper.getString(this, "choose_days"))
             .setView(numberPicker)
             .setPositiveButton("Ok") {_, _ ->
                 maxDays = numberPicker.value
                 currentDays = 0
                 updateButtonFunction()
             }
-            .setNegativeButton("Anuluj", null)
+            .setNegativeButton(LanguageHelper.getString(this, "cancel"), null)
             .show()
     }
 
     private fun updateButtonFunction(){
-        buttonText.text = "Dodaj dzień"
-        dayCounterText.text = "Dni: $currentDays/$maxDays"
+        buttonText.text = LanguageHelper.getString(this, "add_day")
+        dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
         mainButton.setOnClickListener{
             if (currentDays < maxDays){
                 currentDays++
-                dayCounterText.text = "Dni: ($currentDays/$maxDays)"
+                dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
 
                 if (currentDays == maxDays - 7){
                     sendNotification()
@@ -98,21 +100,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLimitReachedDialog(){
         AlertDialog.Builder(this)
-            .setTitle("Limit osiągnięty")
-            .setMessage("Osiągnięto maksymalną ilczbę dni: $maxDays")
+            .setTitle(LanguageHelper.getString(this, "limit_reached"))
+            .setMessage(LanguageHelper.getString(this, "limit_reached_message").format(maxDays))
             .setPositiveButton("Ok") {_, _ -> resetState()}
             .show()
     }
 
     private fun resetState(){
-        buttonText.text = "Wprowadź nowe soczewki"
+        buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
         dayCounterText.text = ""
         mainButton.setOnClickListener{showDayPickerDialog()}
     }
 
     private fun createNotificationChanel(){
-        val name = "Lens Reminder"
-        val descriptionText = "Przypomnienie o wymiane soczewek"
+        val name = LanguageHelper.getString(this, "reminder_title")
+        val descriptionText = LanguageHelper.getString(this, "reminder_title")
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
             description = descriptionText
@@ -135,8 +137,8 @@ class MainActivity : AppCompatActivity() {
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle("Przypomnienie o wymianie soczewek")
-            .setContentText("Zostało 7 dni do wymiany soczewek!")
+            .setContentTitle(LanguageHelper.getString(this, "reminder_title"))
+            .setContentText(LanguageHelper.getString(this, "reminder_message"))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         with(NotificationManagerCompat.from(this)) {
@@ -154,5 +156,4 @@ class MainActivity : AppCompatActivity() {
         val vibrator = vibratorManager.defaultVibrator
         vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
     }
-
 }

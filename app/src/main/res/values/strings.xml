@@ -1,3 +1,26 @@
-<resources>
-    <string name="app_name">Contact lenses</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name_en">Contact lenses</string>
+    <string name="button_desc_en">Lenses button</string>
+    <string name="insert_lenses_textView_en">Add new lenses</string>
+    <string name="select_language_en">Select Language</string>
+    <string name="choose_days_en">Choose number of days</string>
+    <string name="add_day_en">Add Day</string>
+    <string name="days_counter_en">Days: %1$d/%2$d</string>
+    <string name="reminder_title_en">Lens Change Reminder</string>
+    <string name="reminder_message_en">7 days left to change your lenses!</string>
+    <string name="limit_reached_en">Limit reached</string>
+    <string name="limit_reached_message_en">You have reached the maximum number of days: %1$d</string>
+    <string name="cancel_en">Cancel</string>
+
+    <string name="button_desc_pl">Lenses przycisk</string>
+    <string name="insert_lenses_textView_pl" tools:ignore="Typos">Dodaj nowe soczewki</string>
+    <string name="select_language_pl">Wybierz język</string>
+    <string name="choose_days_pl">Wybierz ilość dni</string>
+    <string name="add_day_pl">Dodaj dzień</string>
+    <string name="days_counter_pl">Dni: %1$d/%2$d</string>
+    <string name="reminder_title_pl">Przypomnienie o wymianie soczewek</string>
+    <string name="reminder_message_pl">Zostało 7 dni do wymiany soczewek!</string>
+    <string name="limit_reached_pl">Limit osiągnięty</string>
+    <string name="limit_reached_message_pl">Osiągnięto maksymalną liczbę dni: %1$d</string>
+    <string name="cancel_pl">Anuluj</string>
 </resources>
