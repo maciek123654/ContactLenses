@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         buttonText = findViewById(R.id.buttonText)
         dayCounterText = findViewById(R.id.dayCounterText)
 
-        vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        vibratorManager = getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
         buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
 
         maxDays = sharedPreferences.getInt("maxDays", 0)
@@ -69,9 +69,10 @@ class MainActivity : AppCompatActivity() {
         mainButton.setOnClickListener{
             Log.d("MainActivity", "Klik1")
             vibratePhone()
+
             if (maxDays == 0) {
                 showDayPickerDialog()
-            } else {
+            } else if (maxDays != 0) {
                 updateButtonFunction()
             }
         }
@@ -90,11 +91,17 @@ class MainActivity : AppCompatActivity() {
                 maxDays = numberPicker.value
                 currentDays = 0
                 saveToSharedPreferences()
-                updateButtonFunction()
+                mainButton.setOnClickListener {
+                    updateButtonFunction()
+                }
+
+                buttonText.text = LanguageHelper.getString(this, "add_day")
+                dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
             }
             .setNegativeButton(LanguageHelper.getString(this, "cancel"), null)
             .show()
     }
+
 
     private fun updateButtonFunction() {
         buttonText.text = LanguageHelper.getString(this, "add_day")
@@ -102,7 +109,6 @@ class MainActivity : AppCompatActivity() {
 
         if (currentDays < maxDays) {
             currentDays++
-            Log.d("MainActivity", "Klik2")
             dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
 
             saveToSharedPreferences()
@@ -121,17 +127,26 @@ class MainActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle(LanguageHelper.getString(this, "limit_reached"))
             .setMessage(LanguageHelper.getString(this, "limit_reached_message").format(maxDays))
-            .setPositiveButton("Ok") {_, _ -> resetState()}
+            .setPositiveButton("Ok") { _, _ ->
+                resetState()
+            }
             .show()
     }
+
 
     private fun resetState() {
         maxDays = 0
         currentDays = 0
         saveToSharedPreferences()
+
+        maxDays = sharedPreferences.getInt("maxDays", 0)
+        currentDays = sharedPreferences.getInt("currentDays", 0)
         buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
         dayCounterText.text = ""
-        mainButton.setOnClickListener { showDayPickerDialog() }
+
+        mainButton.setOnClickListener {
+            showDayPickerDialog()
+        }
     }
 
     private fun createNotificationChanel(){
@@ -142,7 +157,7 @@ class MainActivity : AppCompatActivity() {
             description = descriptionText
         }
         val notificationManager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 
@@ -184,7 +199,5 @@ class MainActivity : AppCompatActivity() {
         editor.putInt("maxDays", maxDays)
         editor.putInt("currentDays", currentDays)
         editor.apply()
-
-        Log.d("MainActivity", "Saved maxDays: $maxDays, currentDays: $currentDays")
     }
 }
