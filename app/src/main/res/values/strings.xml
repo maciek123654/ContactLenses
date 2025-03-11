@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name_en">Contact lenses</string>
+    <string name="app_name_en">LensTracker</string>
     <string name="button_desc_en">Lenses button</string>
     <string name="insert_lenses_textView_en">Add new lenses</string>
     <string name="select_language_en">Select Language</string>
@@ -23,4 +23,5 @@
     <string name="limit_reached_pl">Limit osiągnięty</string>
     <string name="limit_reached_message_pl">Osiągnięto maksymalną liczbę dni: %1$d</string>
     <string name="cancel_pl">Anuluj</string>
+    <string name="appTitle">LensTracker</string>
 </resources>

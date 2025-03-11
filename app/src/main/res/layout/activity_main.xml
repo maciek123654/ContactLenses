@@ -15,6 +15,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/space_grotesk"
+            android:text="@string/appTitle"
+            android:textColor="@color/white"
+            android:textSize="38sp"
+            android:textStyle="bold" />
+
         <FrameLayout
             android:layout_width="300dp"
             android:layout_height="300dp"
@@ -26,16 +38,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/circular_button"
-                android:src="@drawable/soczewki"
+                android:contentDescription="@string/button_desc_en"
                 android:scaleType="centerInside"
-                android:contentDescription="@string/button_desc_en"/>
+                android:src="@drawable/soczewki" />
 
             <TextView
                 android:id="@+id/buttonText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textSize="16sp"
+                android:textSize="20sp"
+                android:fontFamily="@font/space_grotesk"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:layout_gravity="center"/>
@@ -48,7 +61,8 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_gravity="center"
+            android:fontFamily="@font/space_grotesk"
             android:layout_marginTop="50dp"
-            android:textSize="16sp"/>
+            android:textSize="20sp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

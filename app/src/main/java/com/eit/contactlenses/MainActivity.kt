@@ -17,10 +17,15 @@ import androidx.core.view.WindowInsetsCompat
 import android.Manifest
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.VibrationEffect
 import android.os.VibratorManager
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.res.ResourcesCompat
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainButton: ImageButton
@@ -37,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -84,10 +90,17 @@ class MainActivity : AppCompatActivity() {
             maxValue = 31
         }
 
-        AlertDialog.Builder(this)
-            .setTitle(LanguageHelper.getString(this, "choose_days"))
+        val titleView = TextView(this).apply{
+            text = LanguageHelper.getString(this@MainActivity, "choose_days")
+            setPadding(40, 20, 40, 20)
+            textSize = 20f
+            typeface = ResourcesCompat.getFont(this@MainActivity, R.font.space_grotesk)
+        }
+
+        val dialog = AlertDialog.Builder(this)
+            .setCustomTitle(titleView)
             .setView(numberPicker)
-            .setPositiveButton("Ok") {_, _ ->
+            .setPositiveButton("Ok") { _, _ ->
                 maxDays = numberPicker.value
                 currentDays = 0
                 saveToSharedPreferences()
@@ -99,9 +112,14 @@ class MainActivity : AppCompatActivity() {
                 dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
             }
             .setNegativeButton(LanguageHelper.getString(this, "cancel"), null)
-            .show()
-    }
+            .create()
 
+        dialog.show()
+
+        val customColor = Color.parseColor("#26AAD3")
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(customColor)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(customColor)
+    }
 
     private fun updateButtonFunction() {
         buttonText.text = LanguageHelper.getString(this, "add_day")
@@ -123,16 +141,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLimitReachedDialog(){
-        AlertDialog.Builder(this)
-            .setTitle(LanguageHelper.getString(this, "limit_reached"))
-            .setMessage(LanguageHelper.getString(this, "limit_reached_message").format(maxDays))
+    private fun showLimitReachedDialog() {
+        val titleView = TextView(this).apply {
+            text = LanguageHelper.getString(this@MainActivity, "limit_reached")
+            setPadding(40, 20, 40, 20)
+            textSize = 20f
+            typeface = ResourcesCompat.getFont(this@MainActivity, R.font.space_grotesk)
+        }
+
+        val messageView = TextView(this).apply {
+            text = LanguageHelper.getString(this@MainActivity, "limit_reached_message").format(maxDays)
+            setPadding(40, 20, 40, 20)
+            textSize = 16f
+            typeface = ResourcesCompat.getFont(this@MainActivity, R.font.space_grotesk)
+        }
+
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(40, 20, 40, 20)
+            addView(titleView)
+            addView(messageView)
+        }
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(layout)
             .setPositiveButton("Ok") { _, _ ->
                 resetState()
             }
             .show()
-    }
 
+        val customColor = Color.parseColor("#26AAD3")
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(customColor)
+    }
 
     private fun resetState() {
         maxDays = 0
