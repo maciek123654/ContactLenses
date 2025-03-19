@@ -64,5 +64,13 @@
             android:fontFamily="@font/space_grotesk"
             android:layout_marginTop="50dp"
             android:textSize="20sp"/>
+
+        <com.eit.contactlenses.CalendarView
+            android:id="@+id/CalendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/dayCounterText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

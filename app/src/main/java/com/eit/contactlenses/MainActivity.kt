@@ -18,10 +18,8 @@ import android.Manifest
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.VibrationEffect
 import android.os.VibratorManager
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
@@ -42,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -54,6 +52,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val calendarView = findViewById<CalendarView>(R.id.CalendarView)
+        calendarView.loadUsedDays(this)
 
         mainButton = findViewById(R.id.mainButton)
         buttonText = findViewById(R.id.buttonText)
@@ -73,13 +74,14 @@ class MainActivity : AppCompatActivity() {
         requestNotificationPermission()
 
         mainButton.setOnClickListener{
-            Log.d("MainActivity", "Klik1")
             vibratePhone()
 
             if (maxDays == 0) {
                 showDayPickerDialog()
             } else if (maxDays != 0) {
                 updateButtonFunction()
+                calendarView.markCurrentDayUsed()
+                //vibratePhone()
             }
         }
     }
@@ -122,6 +124,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateButtonFunction() {
+
+
         buttonText.text = LanguageHelper.getString(this, "add_day")
         dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
 
@@ -130,6 +134,7 @@ class MainActivity : AppCompatActivity() {
             dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
 
             saveToSharedPreferences()
+
 
             if (currentDays == maxDays - 7) {
                 sendNotification()
