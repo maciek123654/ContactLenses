@@ -4,6 +4,7 @@ import DataStoreManager
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ScaleDrawable
 import android.health.connect.datatypes.units.Velocity
 import android.text.Spannable
 import android.text.SpannableString
@@ -124,13 +125,20 @@ class CalendarView(context: Context, attrs: AttributeSet?) : GridLayout(context,
     private fun refreshCalendar() {
         for (i in 0 until columnCount * rowCount) {
             dayViews[i].text = ""
+            dayViews[i].background = GradientDrawable().apply {
+                setColor(Color.parseColor("#26AAD3"))
+                cornerRadius = 20f
+            }
         }
 
         for (day in 1..daysInMonth) {
             val index = startDayOfWeek + day - 1
             dayViews[index].text = day.toString()
 
-            if (day == currentDay) {
+            val isCurrentMonth = calendar.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH) &&
+                   calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+
+            if (day == currentDay && isCurrentMonth) {
                 val border = GradientDrawable().apply {
                     setColor(Color.parseColor("#26AAD3"))
                     setStroke(5, Color.BLACK)

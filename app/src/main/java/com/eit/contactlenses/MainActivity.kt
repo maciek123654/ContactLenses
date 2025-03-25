@@ -24,6 +24,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.res.ResourcesCompat
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainButton: ImageButton
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         if (maxDays > 0){
             dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
+            buttonText.text = LanguageHelper.getString(this, "add_day")
         }
 
         createNotificationChanel()
