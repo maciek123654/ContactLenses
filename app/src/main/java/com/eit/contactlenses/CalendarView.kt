@@ -34,6 +34,7 @@ class CalendarView(context: Context, attrs: AttributeSet?) : GridLayout(context,
     private val currentDay: Int = calendar.get(Calendar.DAY_OF_MONTH)
     private var usedDays: MutableSet<String> = mutableSetOf()
     private var currentMonth: String = getCurrentMonth()
+    private var monthTextView: TextView? = null
 
     private val gestureDetector = GestureDetector(context, this)
 
@@ -48,6 +49,7 @@ class CalendarView(context: Context, attrs: AttributeSet?) : GridLayout(context,
     private fun setupCalendar() {
         dayViews.clear()
         removeAllViews()
+        updateMonthLabel()
 
         for (i in 0 until columnCount * rowCount) {
             val textView = TextView(context).apply {
@@ -119,7 +121,13 @@ class CalendarView(context: Context, attrs: AttributeSet?) : GridLayout(context,
         daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         startDayOfWeek = getStartDayOfWeek()
         currentMonth = getCurrentMonth()
+        updateMonthLabel()
         loadUsedDays(context as LifecycleOwner)
+    }
+
+    fun setMonthTextView(textView: TextView){
+        monthTextView = textView
+        updateMonthLabel()
     }
 
     private fun refreshCalendar() {
@@ -170,6 +178,19 @@ class CalendarView(context: Context, attrs: AttributeSet?) : GridLayout(context,
         text.setSpan(SuperscriptSpan(), day.toString().length, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         text.setSpan(RelativeSizeSpan(0.8f), day.toString().length, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         dayView.text = text
+    }
+
+    private fun getRomanMonth(month: Int): String {
+        val romanMonths = listOf("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII")
+        return romanMonths[month]
+    }
+
+    private fun updateMonthLabel(){
+        val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
+        val monthName = monthFormat.format(calendar.time)
+        val monthRoman = getRomanMonth(calendar.get(Calendar.MONTH))
+
+        monthTextView?.text = "$monthRoman"
     }
 
     //Gesture detector

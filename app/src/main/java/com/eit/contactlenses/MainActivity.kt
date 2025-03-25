@@ -24,6 +24,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.res.ResourcesCompat
+import org.w3c.dom.Text
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
@@ -66,6 +67,9 @@ class MainActivity : AppCompatActivity() {
 
         maxDays = sharedPreferences.getInt("maxDays", 0)
         currentDays = sharedPreferences.getInt("currentDays", 0)
+
+        val monthTextView = findViewById<TextView>(R.id.monthTextView)
+        calendarView.setMonthTextView(monthTextView)
 
         if (maxDays > 0){
             dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
