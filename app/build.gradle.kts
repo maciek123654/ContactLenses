@@ -47,4 +47,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation("androidx.datastore:datastore-preferences:1.1.3")
+    implementation ("androidx.gridlayout:gridlayout:1.0.0")
+
 }

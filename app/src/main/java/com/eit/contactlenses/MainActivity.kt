@@ -1,5 +1,7 @@
+// === MainActivity.kt === (z uproszczoną funkcjonalnością bez kalendarza)
 package com.eit.contactlenses
 
+import DataStoreManager
 import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -12,20 +14,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.Manifest
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.VibrationEffect
 import android.os.VibratorManager
+import android.view.GestureDetector
+import android.view.MotionEvent
+import androidx.gridlayout.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.res.ResourcesCompat
-import org.w3c.dom.Text
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainButton: ImageButton
@@ -33,13 +41,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dayCounterText: TextView
     private lateinit var vibratorManager: VibratorManager
     private lateinit var sharedPreferences: SharedPreferences
+
+    private lateinit var calendarGrid: GridLayout
+    private lateinit var monthTextView: TextView
+    private lateinit var dataStoreManager: DataStoreManager
+
+    private var displayedMonth: Calendar = Calendar.getInstance()
+
     private var maxDays: Int = 0
     private var currentDays: Int = 0
     private val CHANNEL_ID = "lens_notification_chanel"
 
-    override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(newBase?.let { LanguageHelper.applySavedLanguage(it) } ?: newBase)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -48,15 +60,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         sharedPreferences = getSharedPreferences("LensPreferences", MODE_PRIVATE)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        val calendarView = findViewById<CalendarView>(R.id.CalendarView)
-        calendarView.loadUsedDays(this)
 
         mainButton = findViewById(R.id.mainButton)
         buttonText = findViewById(R.id.buttonText)
@@ -68,9 +71,6 @@ class MainActivity : AppCompatActivity() {
         maxDays = sharedPreferences.getInt("maxDays", 0)
         currentDays = sharedPreferences.getInt("currentDays", 0)
 
-        val monthTextView = findViewById<TextView>(R.id.monthTextView)
-        calendarView.setMonthTextView(monthTextView)
-
         if (maxDays > 0){
             dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
             buttonText.text = LanguageHelper.getString(this, "add_day")
@@ -79,22 +79,66 @@ class MainActivity : AppCompatActivity() {
         createNotificationChanel()
         requestNotificationPermission()
 
+        checkIfTodayIsUsed()
+
+        calendarGrid = findViewById(R.id.calendarGrid)
+        monthTextView = findViewById(R.id.monthTextView)
+        dataStoreManager = DataStoreManager(this)
+        displayedMonth = Calendar.getInstance()
+
+
+        updateCalendar()
+
         mainButton.setOnClickListener{
             vibratePhone()
 
             if (maxDays == 0) {
                 showDayPickerDialog()
-            } else if (maxDays != 0) {
+            } else {
                 updateButtonFunction()
-                calendarView.markCurrentDayUsed()
-                //vibratePhone()
+                markTodayUsed()
+                disableMainButton()
             }
         }
     }
 
+    private fun checkIfTodayIsUsed() {
+        val todayStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().time)
+        lifecycleScope.launch {
+            DataStoreManager(this@MainActivity).usedDays.collectLatest { usedDays ->
+                if (usedDays.contains(todayStr)) {
+                    disableMainButton()
+                } else {
+                    enableMainButton()
+                }
+                updateCalendar()
+            }
+        }
+    }
+
+    private fun markTodayUsed(){
+        val today = Calendar.getInstance()
+        val todayStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(today.time)
+
+        lifecycleScope.launch{
+            dataStoreManager.saveUsedDate(todayStr)
+            updateCalendar()
+        }
+    }
+
+    private fun disableMainButton() {
+        mainButton.isEnabled = false
+        mainButton.alpha = 0.5f
+    }
+
+    private fun enableMainButton() {
+        mainButton.isEnabled = true
+        mainButton.alpha = 1.0f
+    }
+
     private fun showDayPickerDialog(){
         val numberPicker = NumberPicker(this).apply{
-            minValue = 20
+            minValue = 2
             maxValue = 31
         }
 
@@ -112,10 +156,6 @@ class MainActivity : AppCompatActivity() {
                 maxDays = numberPicker.value
                 currentDays = 0
                 saveToSharedPreferences()
-                mainButton.setOnClickListener {
-                    updateButtonFunction()
-                }
-
                 buttonText.text = LanguageHelper.getString(this, "add_day")
                 dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
             }
@@ -130,17 +170,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateButtonFunction() {
-
-
         buttonText.text = LanguageHelper.getString(this, "add_day")
         dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
 
         if (currentDays < maxDays) {
             currentDays++
             dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
-
             saveToSharedPreferences()
-
 
             if (currentDays == maxDays - 7) {
                 sendNotification()
@@ -189,15 +225,8 @@ class MainActivity : AppCompatActivity() {
         maxDays = 0
         currentDays = 0
         saveToSharedPreferences()
-
-        maxDays = sharedPreferences.getInt("maxDays", 0)
-        currentDays = sharedPreferences.getInt("currentDays", 0)
         buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
         dayCounterText.text = ""
-
-        mainButton.setOnClickListener {
-            showDayPickerDialog()
-        }
     }
 
     private fun createNotificationChanel(){
@@ -234,12 +263,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
     private fun vibratePhone(){
         val vibrator = vibratorManager.defaultVibrator
         vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
@@ -250,5 +273,70 @@ class MainActivity : AppCompatActivity() {
         editor.putInt("maxDays", maxDays)
         editor.putInt("currentDays", currentDays)
         editor.apply()
+    }
+
+    private fun updateCalendar() {
+        //val calendar = Calendar.getInstance()
+        val calendar = displayedMonth.clone() as Calendar
+        val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+        monthTextView.text = dateFormat.format(calendar.time).replaceFirstChar { it.uppercase() }
+
+        val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        val firstDayOfWeek = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7  // Monday = 0
+
+        calendarGrid.removeAllViews()
+        calendarGrid.columnCount = 7
+
+        lifecycleScope.launch {
+            val usedDays = dataStoreManager.usedDays.first()
+            val currentMonth = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(calendar.time)
+
+            val totalCells = ((firstDayOfWeek + daysInMonth + 6) / 7) * 7
+            for (i in 0 until totalCells) {
+                val dayLayout = LinearLayout(this@MainActivity).apply {
+                    orientation = LinearLayout.VERTICAL
+                    layoutParams = GridLayout.LayoutParams().apply {
+                        width = 0
+                        height = GridLayout.LayoutParams.WRAP_CONTENT
+                        columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    }
+                    setPadding(8, 8, 8, 8)
+                }
+
+                val dayNumber = i - firstDayOfWeek + 1
+
+                if (i < firstDayOfWeek || dayNumber > daysInMonth) {
+                    // Pusta komórka
+                    dayLayout.addView(TextView(this@MainActivity).apply {
+                        text = ""
+                        textSize = 16f
+                    })
+                } else {
+                    val dateStr = String.format("%s-%02d", currentMonth, dayNumber)
+                    val used = usedDays.contains(dateStr)
+
+                    val dayText = TextView(this@MainActivity).apply {
+                        text = dayNumber.toString()
+                        textSize = 16f
+                        setTextColor(Color.WHITE)
+                        typeface = ResourcesCompat.getFont(context, R.font.space_grotesk)
+                        textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                    }
+
+                    val dot = TextView(this@MainActivity).apply {
+                        text = if (used) "•" else ""
+                        textSize = 18f
+                        setTextColor(Color.WHITE)
+                        textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                    }
+
+                    dayLayout.addView(dayText)
+                    dayLayout.addView(dot)
+                }
+
+                calendarGrid.addView(dayLayout)
+            }
+        }
     }
 }
