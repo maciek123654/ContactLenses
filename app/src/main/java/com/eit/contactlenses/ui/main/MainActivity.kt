@@ -17,6 +17,7 @@ import androidx.gridlayout.widget.GridLayout
 import androidx.lifecycle.lifecycleScope
 import com.eit.contactlenses.R
 import com.eit.contactlenses.ui.calendar.CalendarManager
+import com.eit.contactlenses.ui.calendar.CalendarSwipeListener
 import com.eit.contactlenses.ui.language.LanguageHelper
 import com.eit.contactlenses.util.NotificationUtils
 import kotlinx.coroutines.flow.collectLatest
@@ -59,6 +60,8 @@ class MainActivity : AppCompatActivity() {
 
         dataStoreManager = DataStoreManager(this)
         calendarManager = CalendarManager(this, calendarGrid, monthTextView, dataStoreManager, lifecycleScope)
+
+        calendarGrid.setOnTouchListener(CalendarSwipeListener(this, calendarManager))
 
         // Ustawienie wartości z pamięci
         maxDays = sharedPreferences.getInt("maxDays", 0)

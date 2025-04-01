@@ -83,7 +83,9 @@
             android:padding="8dp"
             app:alignmentMode="alignMargins"
             app:columnCount="7"
-            app:useDefaultMargins="true" />
+            app:useDefaultMargins="true"
+            android:clickable="true"
+            android:focusable="true"/>
 
 
     </LinearLayout>
