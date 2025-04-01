@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContactLenses">
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,8 +23,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LanguageSelectionActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".ui.language.LanguageSelectionActivity" />
+        <activity android:name=".ui.main.MainActivity" />
     </application>
 
 </manifest>

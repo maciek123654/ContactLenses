@@ -1,9 +1,13 @@
-package com.eit.contactlenses
+package com.eit.contactlenses.ui.splash
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.eit.contactlenses.ui.language.LanguageHelper
+import com.eit.contactlenses.ui.language.LanguageSelectionActivity
+import com.eit.contactlenses.R
+import com.eit.contactlenses.ui.main.MainActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

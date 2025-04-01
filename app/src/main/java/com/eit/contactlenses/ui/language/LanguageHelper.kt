@@ -1,4 +1,4 @@
-package com.eit.contactlenses
+package com.eit.contactlenses.ui.language
 
 import android.content.Context
 import android.content.res.Configuration
