@@ -1,5 +1,6 @@
 package com.eit.contactlenses.ui.calendar
 
+import com.eit.contactlenses.util.getRomanNumeralForMonth
 import android.content.Context
 import android.graphics.Color
 import android.widget.LinearLayout
@@ -26,8 +27,8 @@ class CalendarManager(
 
     fun updateCalendar() {
         val calendar = displayedMonth.clone() as Calendar
-        val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
-        monthTextView.text = dateFormat.format(calendar.time).replaceFirstChar { it.uppercase() }
+        val romanMonth = getRomanNumeralForMonth(calendar.get(Calendar.MONTH))
+        monthTextView.text = romanMonth
 
         val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         calendar.set(Calendar.DAY_OF_MONTH, 1)
@@ -39,6 +40,8 @@ class CalendarManager(
         coroutineScope.launch {
             val usedDays = dataStoreManager.usedDays.first()
             val currentMonth = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(calendar.time)
+
+            val today = Calendar.getInstance()
 
             val totalCells = ((firstDayOfWeek + daysInMonth + 6) / 7) * 7
             for (i in 0 until totalCells) {
@@ -76,6 +79,14 @@ class CalendarManager(
                         textSize = 18f
                         setTextColor(Color.WHITE)
                         textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+                    }
+
+                    val isToday = calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                            calendar.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+                            dayNumber == today.get(Calendar.DAY_OF_MONTH)
+
+                    if (isToday) {
+                        dayLayout.setBackgroundResource(R.drawable.today_border)
                     }
 
                     dayLayout.addView(dayText)
