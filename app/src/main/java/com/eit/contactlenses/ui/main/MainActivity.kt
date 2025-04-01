@@ -2,6 +2,7 @@ package com.eit.contactlenses.ui.main
 
 import DataStoreManager
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     private var currentDays: Int = 0
 
     // === Lifecycle ===
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
@@ -106,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDayPickerDialog() {
         val numberPicker = NumberPicker(this).apply {
-            minValue = 2
+            minValue = 20
             maxValue = 31
         }
 

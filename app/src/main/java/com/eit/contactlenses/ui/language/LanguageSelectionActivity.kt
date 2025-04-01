@@ -1,6 +1,5 @@
 package com.eit.contactlenses.ui.language
 
-import android.R
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.eit.contactlenses.ui.main.MainActivity
+
+const val item1 = android.R.layout.simple_list_item_1
 
 class LanguageSelectionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +22,8 @@ class LanguageSelectionActivity : AppCompatActivity() {
         val languages = arrayOf("Polski", "English")
         val languageCodes = arrayOf("pl", "en")
 
-        val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, languages).apply {
-            setDropDownViewResource(R.layout.simple_list_item_1)
+        val adapter = ArrayAdapter(this, item1, languages).apply {
+            setDropDownViewResource(item1)
         }
 
         val listView = ListView(this).apply {

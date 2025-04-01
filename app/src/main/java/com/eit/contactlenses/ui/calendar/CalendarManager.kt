@@ -63,11 +63,11 @@ class CalendarManager(
                         textSize = 16f
                     })
                 } else {
-                    val dateStr = String.format("%s-%02d", currentMonth, dayNumber)
+                    val dateStr = String.format(Locale.getDefault(), "%s-%02d", currentMonth, dayNumber)
                     val used = usedDays.contains(dateStr)
 
                     val dayText = TextView(context).apply {
-                        text = dayNumber.toString()
+                        text = String.format(Locale.getDefault(), "%d", dayNumber)
                         textSize = 16f
                         setTextColor(Color.WHITE)
                         typeface = ResourcesCompat.getFont(context, R.font.space_grotesk)

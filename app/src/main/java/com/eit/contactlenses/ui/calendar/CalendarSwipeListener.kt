@@ -7,7 +7,7 @@ import android.view.View
 import java.util.*
 import kotlin.math.abs
 
-class CalendarSwipeListener(private val context: Context, private val calendarManager: CalendarManager) : View.OnTouchListener {
+class CalendarSwipeListener(context: Context, private val calendarManager: CalendarManager) : View.OnTouchListener {
 
     private val gestureDetector = GestureDetector(context, GestureListener())
 
@@ -23,8 +23,8 @@ class CalendarSwipeListener(private val context: Context, private val calendarMa
 
     private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
 
-        private val SWIPE_THRESHOLD = 100
-        private val SWIPE_VELOCITY_THRESHOLD = 100
+        private val swipeThreshold = 100
+        private val swipeVelocityThreshold = 100
 
         override fun onFling(
             e1: MotionEvent?,  // <- NULLABLE!
@@ -36,8 +36,8 @@ class CalendarSwipeListener(private val context: Context, private val calendarMa
             val diffY = e2.y - (e1.y)
 
             if (abs(diffX) > abs(diffY) &&
-                abs(diffX) > SWIPE_THRESHOLD &&
-                abs(velocityX) > SWIPE_VELOCITY_THRESHOLD
+                abs(diffX) > swipeThreshold &&
+                abs(velocityX) > swipeVelocityThreshold
             ) {
                 if (diffX > 0) {
                     calendarManager.displayedMonth.add(Calendar.MONTH, -1)

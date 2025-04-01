@@ -8,18 +8,18 @@ import kotlinx.coroutines.flow.map
 private val Context.dataStore by preferencesDataStore(name = "calendar_prefs")
 
 class DataStoreManager(private val context: Context) {
-    private val USED_DAYS_KEY = stringSetPreferencesKey("used_days")
+    private val usedDaysKey = stringSetPreferencesKey("used_days")
 
     val usedDays: Flow<Set<String>> = context.dataStore.data
         .map { preferences ->
-            preferences[USED_DAYS_KEY] ?: emptySet()
+            preferences[usedDaysKey] ?: emptySet()
         }
 
     suspend fun saveUsedDate(dateString: String) {
         context.dataStore.edit { preferences ->
-            val updatedDays = preferences[USED_DAYS_KEY]?.toMutableSet() ?: mutableSetOf()
+            val updatedDays = preferences[usedDaysKey]?.toMutableSet() ?: mutableSetOf()
             updatedDays.add(dateString)
-            preferences[USED_DAYS_KEY] = updatedDays
+            preferences[usedDaysKey] = updatedDays
         }
     }
 }

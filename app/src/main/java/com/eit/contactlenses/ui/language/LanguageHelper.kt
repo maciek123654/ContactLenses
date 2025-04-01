@@ -1,5 +1,6 @@
 package com.eit.contactlenses.ui.language
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import java.util.Locale
@@ -47,11 +48,7 @@ object LanguageHelper {
         return sharedPreferences.getString(LANGUAGE_KEY, Locale.getDefault().language) ?: "en"
     }
 
-    fun applySavedLanguage(context: Context): Context {
-        val languageCode = getSavedLanguage(context)
-        return setLanguage(context, languageCode)
-    }
-
+    @SuppressLint("DiscouragedApi") // używane celowo do dynamicznego pobierania tłumaczeń
     fun getString(context: Context, key: String): String{
         val langCode = getSavedLanguage(context)
         val resourceId = context.resources.getIdentifier("${key}_$langCode", "string", context.packageName)

@@ -1,5 +1,6 @@
 package com.eit.contactlenses.ui.splash
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.eit.contactlenses.ui.language.LanguageSelectionActivity
 import com.eit.contactlenses.R
 import com.eit.contactlenses.ui.main.MainActivity
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)

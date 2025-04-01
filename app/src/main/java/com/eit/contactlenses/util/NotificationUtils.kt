@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -14,16 +13,14 @@ object NotificationUtils {
     const val CHANNEL_ID = "lens_notification_chanel"
 
     fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = LanguageHelper.getString(context, "reminder_title")
-            val descriptionText = name
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
-            notificationManager?.createNotificationChannel(channel)
+        val name = LanguageHelper.getString(context, "reminder_title")
+        val descriptionText = name
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            description = descriptionText
         }
+        val notificationManager = context.getSystemService(NotificationManager::class.java)
+        notificationManager?.createNotificationChannel(channel)
     }
 
     fun sendNotification(context: Context) {
