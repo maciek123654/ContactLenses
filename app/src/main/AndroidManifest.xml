@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.menu.SettingsActivity" android:theme="@style/Theme.ContactLenses"/>
+
+
     </application>
 
 </manifest>

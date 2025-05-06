@@ -11,4 +11,23 @@
     <string name="limit_reached_en">Limit reached</string>
     <string name="limit_reached_message_en">You have reached the maximum number of days: %1$d</string>
     <string name="cancel_en">Cancel</string>
+    <string name="settings_en">Settings</string>
+    <string name="settings_notify_h_en">Notifications</string>
+    <string name="notify_1_text_en">Lens replacement reminder</string>
+    <string name="notify_1_desc_en">You will be notified 7 days before your lenses need to be changed.</string>
+    <string name="notify_2_text_en">Daily usage reminder</string>
+    <string name="notify_2_desc_en">Get a notification in the evening if you forget to log your lens usage.</string>
+    <string name="privacy_h_en">Privacy policy</string>
+    <string name="privacy_more_en">Show more</string>
+    <string name="privacy_less_en">Show less</string>
+    <string name="footer_1_en">2025 Maciej Simiński</string>
+
+    <string name="settings_desc_en">Settings button</string>
+    <string name="back_desc_en">Back to main view button</string>
+
+    <string name="privacy_politycy_en">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque enim velit, tempus ut libero sit amet, sodales accumsan odio. Mauris a malesuada eros. Ut dignissim velit sit amet dui dictum, sit amet laoreet erat dignissim. Vivamus efficitur efficitur facilisis. Suspendisse lectus arcu, vehicula in odio a, pellentesque dictum nulla. Proin vehicula massa nunc, luctus posuere tortor ornare ut. Cras laoreet convallis tristique. Donec luctus elit gravida eleifend pharetra. Curabitur non lorem imperdiet, scelerisque turpis eget, blandit tellus. Nullam in orci faucibus, sodales purus eu, lobortis velit. Integer vulputate at enim at pharetra.
+    Proin et eros erat. Quisque quis odio in diam lacinia auctor. Donec ut mollis massa. Aenean sagittis sapien ut arcu bibendum interdum. Vivamus et consequat nibh. Fusce nec eros ex. Integer quis iaculis nunc, ac cursus nibh. Phasellus enim diam, vehicula nec efficitur quis, dictum non diam. Maecenas porta porttitor enim. Suspendisse lobortis quam sit amet imperdiet aliquet. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam pharetra dolor at neque dapibus bibendum. Aenean tincidunt tortor suscipit, commodo nisl at, rhoncus nulla. Sed vitae nisi ipsum. Fusce malesuada laoreet fermentum.
+    Ut lobortis justo ac eros lacinia, eget porta orci facilisis. Vivamus elementum urna finibus, laoreet orci vel, viverra ex. Duis in porttitor ex. Morbi erat quam, interdum et euismod a, blandit a dolor. Aenean interdum gravida ante ultrices pulvinar. Integer finibus lacinia justo, eget vestibulum urna elementum gravida. Proin tortor nisi, dapibus sit amet felis sit amet, malesuada congue ipsum. Aliquam bibendum elit at laoreet pharetra. Suspendisse potenti. Mauris mollis scelerisque velit sit amet auctor.
+    Aenean egestas, libero vestibulum viverra iaculis, neque purus elementum erat, at dictum magna nunc eget tortor. Aenean id erat tortor. Sed vel ullamcorper lectus. Donec dignissim nisi nec magna fringilla, in ultrices diam porttitor. Donec sit amet risus vel eros tincidunt venenatis. Suspendisse potenti. Ut sodales lacus eget varius venenatis. Sed fermentum vehicula sapien vitae blandit. Pellentesque tincidunt purus ut ligula vestibulum, ut efficitur erat lacinia. Aliquam a porttitor libero, et pretium velit. In ultricies nibh urna, ut porttitor orci pellentesque ac. Aenean tristique lectus et urna accumsan, faucibus rhoncus massa placerat. Maecenas tincidunt elit et mauris vestibulum tristique. Quisque posuere quam nec pharetra commodo. Nam ornare hendrerit lorem in sagittis.
+    Pellentesque consectetur, nisi rhoncus fringilla dignissim, nulla purus tempus arcu, vitae luctus elit massa sit amet tortor. Integer mollis porttitor dolor, non faucibus libero. Praesent consequat tortor nisi, eu pulvinar nulla eleifend quis. Aenean faucibus nibh arcu, in congue nunc tincidunt sed. Aenean sit amet sollicitudin erat. Curabitur vitae porttitor libero. Duis auctor dignissim laoreet. In hac habitasse platea dictumst. Aliquam eu scelerisque magna. Nullam pellentesque nec nisi efficitur fringilla. Sed eu sollicitudin sapien. Quisque fermentum suscipit placerat. Pellentesque iaculis pulvinar ligula ac aliquet. Donec vitae faucibus massa. Praesent eu consectetur leo.</string>
 </resources>

@@ -2,7 +2,12 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ContactLenses" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="android:statusBarColor">#26AAD3</item>
+        <item name="android:navigationBarColor">#26AAD3</item>
+        <item name="colorControlActivated">#FFFFFF</item>
+        <item name="colorSwitchThumbNormal">#CCCCCC</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.ContactLenses" parent="Base.Theme.ContactLenses" />

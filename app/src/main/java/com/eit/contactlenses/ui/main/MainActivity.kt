@@ -1,9 +1,11 @@
 package com.eit.contactlenses.ui.main
 
+import com.eit.contactlenses.util.AnimationUtils
 import DataStoreManager
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -19,11 +21,13 @@ import androidx.lifecycle.lifecycleScope
 import com.eit.contactlenses.R
 import com.eit.contactlenses.ui.calendar.CalendarManager
 import com.eit.contactlenses.ui.calendar.CalendarSwipeListener
+import com.eit.contactlenses.ui.menu.SettingsActivity
 import com.eit.contactlenses.util.NotificationUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -63,6 +67,13 @@ class MainActivity : AppCompatActivity() {
         calendarManager = CalendarManager(this, calendarGrid, monthTextView, dataStoreManager, lifecycleScope)
 
         calendarGrid.setOnTouchListener(CalendarSwipeListener(this, calendarManager))
+
+        val settingsButton: ImageButton = findViewById(R.id.settingsButton)
+        settingsButton.setOnClickListener{
+            AnimationUtils.rotateAndNavigate(settingsButton) {
+                startActivity(Intent(this, SettingsActivity::class.java))
+            }
+        }
 
         // Ustawienie wartości z pamięci
         maxDays = sharedPreferences.getInt("maxDays", 0)
@@ -112,7 +123,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         val titleView = TextView(this).apply {
-            //text = LanguageHelper.getString(this@MainActivity, "choose_days")
             text = getString(R.string.choose_days_en)
             setPadding(40, 20, 40, 20)
             textSize = 20f
@@ -199,7 +209,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLimitReachedDialog() {
         val titleView = TextView(this).apply {
-            //text = LanguageHelper.getString(this@MainActivity, "limit_reached")
             text = getString(R.string.limit_reached_en)
             setPadding(40, 20, 40, 20)
             textSize = 20f
@@ -207,7 +216,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         val messageView = TextView(this).apply {
-            //text = LanguageHelper.getString(this@MainActivity, "limit_reached_message").format(maxDays)
             text = getString(R.string.limit_reached_message_en)
             setPadding(40, 20, 40, 20)
             textSize = 16f
