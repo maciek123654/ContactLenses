@@ -19,7 +19,6 @@ import androidx.lifecycle.lifecycleScope
 import com.eit.contactlenses.R
 import com.eit.contactlenses.ui.calendar.CalendarManager
 import com.eit.contactlenses.ui.calendar.CalendarSwipeListener
-import com.eit.contactlenses.ui.language.LanguageHelper
 import com.eit.contactlenses.util.NotificationUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -70,10 +69,10 @@ class MainActivity : AppCompatActivity() {
         currentDays = sharedPreferences.getInt("currentDays", 0)
 
         if (maxDays > 0) {
-            dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
-            buttonText.text = LanguageHelper.getString(this, "add_day")
+            dayCounterText.text = getString(R.string.days_counter_en).format(currentDays, maxDays)
+            buttonText.text = getString(R.string.add_day_en)
         } else {
-            buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
+            buttonText.text = getString(R.string.insert_lenses_textView_en)
         }
 
         // Notyfikacje
@@ -113,7 +112,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         val titleView = TextView(this).apply {
-            text = LanguageHelper.getString(this@MainActivity, "choose_days")
+            //text = LanguageHelper.getString(this@MainActivity, "choose_days")
+            text = getString(R.string.choose_days_en)
             setPadding(40, 20, 40, 20)
             textSize = 20f
             typeface = ResourcesCompat.getFont(this@MainActivity, R.font.space_grotesk)
@@ -126,10 +126,10 @@ class MainActivity : AppCompatActivity() {
                 maxDays = numberPicker.value
                 currentDays = 0
                 saveToSharedPreferences()
-                buttonText.text = LanguageHelper.getString(this, "add_day")
-                dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
+                buttonText.text = getString(R.string.add_day_en)
+                dayCounterText.text = getString(R.string.days_counter_en).format(currentDays, maxDays)
             }
-            .setNegativeButton(LanguageHelper.getString(this, "cancel"), null)
+            .setNegativeButton(getString(R.string.cancel_en), null)
             .create()
 
         dialog.show()
@@ -140,10 +140,10 @@ class MainActivity : AppCompatActivity() {
 
     // === Obsługa głównego przycisku ===
     private fun updateButtonFunction() {
-        buttonText.text = LanguageHelper.getString(this, "add_day")
+        buttonText.text = getString(R.string.add_day_en)
         if (currentDays < maxDays) {
             currentDays++
-            dayCounterText.text = LanguageHelper.getString(this, "days_counter").format(currentDays, maxDays)
+            dayCounterText.text = getString(R.string.days_counter_en).format(currentDays, maxDays)
             saveToSharedPreferences()
 
             if (currentDays == maxDays - 7) {
@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
         maxDays = 0
         currentDays = 0
         saveToSharedPreferences()
-        buttonText.text = LanguageHelper.getString(this, "insert_lenses_textView")
+        buttonText.text = getString(R.string.insert_lenses_textView_en)
         dayCounterText.text = ""
     }
 
@@ -199,14 +199,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLimitReachedDialog() {
         val titleView = TextView(this).apply {
-            text = LanguageHelper.getString(this@MainActivity, "limit_reached")
+            //text = LanguageHelper.getString(this@MainActivity, "limit_reached")
+            text = getString(R.string.limit_reached_en)
             setPadding(40, 20, 40, 20)
             textSize = 20f
             typeface = ResourcesCompat.getFont(this@MainActivity, R.font.space_grotesk)
         }
 
         val messageView = TextView(this).apply {
-            text = LanguageHelper.getString(this@MainActivity, "limit_reached_message").format(maxDays)
+            //text = LanguageHelper.getString(this@MainActivity, "limit_reached_message").format(maxDays)
+            text = getString(R.string.limit_reached_message_en)
             setPadding(40, 20, 40, 20)
             textSize = 16f
             typeface = ResourcesCompat.getFont(this@MainActivity, R.font.space_grotesk)

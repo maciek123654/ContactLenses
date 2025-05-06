@@ -2,18 +2,18 @@ package com.eit.contactlenses.util
 
 fun getRomanNumeralForMonth(montIndex: Int): String {
     return when (montIndex){
-        0 -> "I"
-        1 -> "II"
-        2 -> "III"
-        3 -> "IV"
-        4 -> "V"
-        5 -> "VI"
-        6 -> "VII"
-        7 -> "VIII"
-        8 -> "IX"
-        9 -> "X"
-        10 -> "XI"
-        11 -> "XII"
+        0 -> "January"
+        1 -> "February"
+        2 -> "March"
+        3 -> "April"
+        4 -> "May"
+        5 -> "June"
+        6 -> "July"
+        7 -> "August"
+        8 -> "September"
+        9 -> "October"
+        10 -> "November"
+        11 -> "December"
         else -> ""
     }
 }

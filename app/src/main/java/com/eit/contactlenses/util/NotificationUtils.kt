@@ -7,13 +7,13 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.eit.contactlenses.ui.language.LanguageHelper
+import com.eit.contactlenses.R
 
 object NotificationUtils {
     const val CHANNEL_ID = "lens_notification_chanel"
 
     fun createNotificationChannel(context: Context) {
-        val name = LanguageHelper.getString(context, "reminder_title")
+        val name = context.getString(R.string.reminder_title_en)
         val descriptionText = name
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
@@ -34,8 +34,8 @@ object NotificationUtils {
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(LanguageHelper.getString(context, "reminder_title"))
-            .setContentText(LanguageHelper.getString(context, "reminder_message"))
+            .setContentTitle(context.getString(R.string.reminder_title_en))
+            .setContentText(context.getString(R.string.reminder_message_en))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         with(NotificationManagerCompat.from(context)) {
